@@ -1,0 +1,9 @@
+{
+	"name": "atanskafabrykadanych",
+	"location": "polandcentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "af859ce3-b57f-45e6-ac91-1f6e981beccd",
+		"tenantId": "79b774ec-e0fb-461e-9a58-7c73e6306832"
+	}
+}
