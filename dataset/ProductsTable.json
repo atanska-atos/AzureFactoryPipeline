@@ -1,0 +1,48 @@
+{
+	"name": "ProductsTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageSource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Products.csv",
+				"container": "atanskakontener"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Division",
+				"type": "String"
+			},
+			{
+				"name": "Product Name",
+				"type": "String"
+			},
+			{
+				"name": "Factory",
+				"type": "String"
+			},
+			{
+				"name": "Product ID",
+				"type": "String"
+			},
+			{
+				"name": "Unit Price",
+				"type": "String"
+			},
+			{
+				"name": "Unit Cost",
+				"type": "String"
+			}
+		]
+	}
+}
