@@ -1,0 +1,58 @@
+{
+	"name": "addNewColumn",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ProductsTable",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "ProductsWithUnitProfit"
+				}
+			],
+			"transformations": [
+				{
+					"name": "addUnitProfitColumn"
+				},
+				{
+					"name": "roundValues"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Division as string,",
+				"          {Product Name} as string,",
+				"          Factory as string,",
+				"          {Product ID} as string,",
+				"          {Unit Price} as string,",
+				"          {Unit Cost} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive({Unit Profit} = toFloat({Unit Price})-toFloat({Unit Cost})) ~> addUnitProfitColumn",
+				"addUnitProfitColumn derive({Unit Profit} = round({Unit Profit},2)) ~> roundValues",
+				"roundValues sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ProductsWithUnitProfit"
+			]
+		}
+	}
+}
