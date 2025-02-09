@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "roundColums",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
