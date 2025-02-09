@@ -1,0 +1,266 @@
+{
+	"name": "productsStatistics",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ProductsDefault",
+						"type": "DatasetReference"
+					},
+					"name": "ProductsUnitProfit"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "avgUnits"
+				},
+				{
+					"name": "roundValues1"
+				},
+				{
+					"name": "avgDivisionFactory"
+				},
+				{
+					"name": "roundValues2"
+				},
+				{
+					"name": "factoryShack"
+				},
+				{
+					"name": "sumUnitsWicked"
+				},
+				{
+					"name": "sumUnitsShack"
+				},
+				{
+					"name": "totalUnitsShack"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "addJoinColumnTotalShack"
+				},
+				{
+					"name": "addJoinColumnSumShack"
+				},
+				{
+					"name": "percentageDivision"
+				},
+				{
+					"name": "removeColumnsPercentage"
+				},
+				{
+					"name": "totalUnitWicked"
+				},
+				{
+					"name": "addJoinColumnTotalWicked"
+				},
+				{
+					"name": "addJoinColumnSumWicked"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "percentageDivisionWicked"
+				},
+				{
+					"name": "removeColumnsPercentage2"
+				},
+				{
+					"name": "sumUnitsTheOther"
+				},
+				{
+					"name": "totalUnitsTheOther"
+				},
+				{
+					"name": "totalUnitsSecret"
+				},
+				{
+					"name": "sumUnitsSecrets"
+				},
+				{
+					"name": "addJoinColumnTotalTheOther"
+				},
+				{
+					"name": "addJoinColumnSumTheOther"
+				},
+				{
+					"name": "addJoinColumnTotalSecret"
+				},
+				{
+					"name": "addJoinColumnSumSecret"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "percentageDivisionTheOther"
+				},
+				{
+					"name": "percentageDivisionSecret"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Division as string,",
+				"          {Product Name} as string,",
+				"          Factory as string,",
+				"          {Product ID} as string,",
+				"          {Unit Price} as string,",
+				"          {Unit Cost} as string,",
+				"          {Unit Profit} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ProductsUnitProfit",
+				"ProductsUnitProfit aggregate(groupBy(Division),",
+				"     AVG_Unit_Price = avg(toFloat({Unit Price})),",
+				"          AVG_Unit_Cost = avg(toFloat({Unit Cost})),",
+				"          AVG_Unit_Profit = avg(toFloat({Unit Profit}))) ~> avgUnits",
+				"avgUnits derive(AVG_Unit_Price = round({AVG_Unit_Price},2),",
+				"          AVG_Unit_Cost = round({AVG_Unit_Cost},2),",
+				"          AVG_Unit_Profit = round({AVG_Unit_Profit},2)) ~> roundValues1",
+				"ProductsUnitProfit aggregate(groupBy(Division,",
+				"          Factory),",
+				"     AVG_Unit_Price = avg(toFloat({Unit Price})),",
+				"          AVG_Unit_Cost = avg(toFloat({Unit Cost})),",
+				"          AVG_Unit_Profit = avg(toFloat({Unit Profit}))) ~> avgDivisionFactory",
+				"avgDivisionFactory derive(AVG_Unit_Price = round(AVG_Unit_Price,2),",
+				"          AVG_Unit_Cost = round(AVG_Unit_Cost,2),",
+				"          AVG_Unit_Profit = round(AVG_Unit_Profit,2)) ~> roundValues2",
+				"ProductsUnitProfit split(Factory == \"Lot's O' Nuts\",",
+				"     Factory == \"Wicked Choccy's\",",
+				"     Factory == \"Sugar Shack\",",
+				"     Factory == \"The Other Factory\",",
+				"     Factory == \"Secret Factory\",",
+				"     disjoint: false) ~> factoryShack@(factoryLots, factoryWicked, factoryShack, factoryTheOther, factorySecret)",
+				"factoryShack@factoryWicked aggregate(groupBy(Division),",
+				"     sumUnitPrice = sum(toFloat({Unit Price})),",
+				"          sumUnitCost = sum(toFloat({Unit Cost})),",
+				"          sumUnitProfit = sum(toFloat({Unit Profit}))) ~> sumUnitsWicked",
+				"factoryShack@factoryShack aggregate(groupBy(Division),",
+				"     sumUnitPrice = sum(toFloat({Unit Price})),",
+				"          sumUnitCost = sum(toFloat({Unit Cost})),",
+				"          sumUnitProfit = sum(toFloat({Unit Profit}))) ~> sumUnitsShack",
+				"factoryShack@factoryShack aggregate(totalSumUnitPrice = sum(toFloat({Unit Price})),",
+				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
+				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitsShack",
+				"addJoinColumnSumShack, addJoinColumnTotalShack join(JoinKeySum == JoinKeyTotal,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"totalUnitsShack derive(JoinKeyTotal = 1) ~> addJoinColumnTotalShack",
+				"sumUnitsShack derive(JoinKeySum = 1) ~> addJoinColumnSumShack",
+				"join1 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
+				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivision",
+				"percentageDivision select(mapColumn(",
+				"          Division,",
+				"          percentageUnitPrice,",
+				"          percentageUnitCost,",
+				"          percentageUnitProfit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentage",
+				"factoryShack@factoryWicked aggregate(totalSumUnitPrice = sum(toFloat({Unit Price})),",
+				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
+				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitWicked",
+				"totalUnitWicked derive(JoinKeyTotal = 1) ~> addJoinColumnTotalWicked",
+				"sumUnitsWicked derive(JoinKeySum = 1) ~> addJoinColumnSumWicked",
+				"addJoinColumnSumWicked, addJoinColumnTotalWicked join(JoinKeySum == JoinKeyTotal,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
+				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionWicked",
+				"percentageDivisionWicked select(mapColumn(",
+				"          Division,",
+				"          percentageUnitPrice,",
+				"          percentageUnitCost,",
+				"          percentageUnitProfit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentage2",
+				"factoryShack@factoryTheOther aggregate(groupBy(Division),",
+				"     sumUnitPrice = sum(toFloat({Unit Price})),",
+				"          sumUnitProfit = sum(toFloat({Unit Profit})),",
+				"          sumUnitCost = sum(toFloat({Unit Cost}))) ~> sumUnitsTheOther",
+				"factoryShack@factoryTheOther aggregate(totalSumUnitPrice = sum(toFloat({Unit Price})),",
+				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
+				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitsTheOther",
+				"factoryShack@factorySecret aggregate(totalSumUnitPrice = sum(toFloat({Unit Price})),",
+				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
+				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitsSecret",
+				"factoryShack@factorySecret aggregate(groupBy(Division),",
+				"     sumUnitPrice = sum(toFloat({Unit Price})),",
+				"          sumUnitCost = sum(toFloat({Unit Cost})),",
+				"          sumUnitProfit = sum(toFloat({Unit Profit}))) ~> sumUnitsSecrets",
+				"totalUnitsTheOther derive(JoinKeyTotal = 1) ~> addJoinColumnTotalTheOther",
+				"sumUnitsTheOther derive(JoinKeySum = 1) ~> addJoinColumnSumTheOther",
+				"sumUnitsSecrets derive(JoinKeyTotal = 1) ~> addJoinColumnTotalSecret",
+				"totalUnitsSecret derive(JoinKeySum = 1) ~> addJoinColumnSumSecret",
+				"addJoinColumnSumTheOther, addJoinColumnTotalTheOther join(JoinKeySum == JoinKeyTotal,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"addJoinColumnSumSecret, addJoinColumnTotalSecret join(JoinKeySum == JoinKeyTotal,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join3 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
+				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionTheOther",
+				"join4 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
+				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionSecret",
+				"percentageDivisionSecret select(mapColumn(",
+				"          Division,",
+				"          percentageUnitPrice,",
+				"          percentageUnitCost,",
+				"          percentageUnitProfit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"percentageDivisionTheOther select(mapColumn(",
+				"          Division,",
+				"          percentageUnitPrice,",
+				"          percentageUnitCost,",
+				"          percentageUnitProfit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"factoryShack@factoryLots derive() ~> derivedColumn1",
+				"roundValues2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
