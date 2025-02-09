@@ -116,9 +116,6 @@
 				},
 				{
 					"name": "select2"
-				},
-				{
-					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -255,7 +252,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
-				"factoryShack@factoryLots derive() ~> derivedColumn1",
 				"roundValues2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
