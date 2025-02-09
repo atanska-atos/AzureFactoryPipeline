@@ -1,0 +1,23 @@
+{
+	"name": "Result1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageResults",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "factories",
+				"container": "results"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

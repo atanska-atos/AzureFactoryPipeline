@@ -1,0 +1,51 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "FactoriesTable",
+						"type": "DatasetReference"
+					},
+					"name": "factoriesRoundNumbers"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Result1",
+						"type": "DatasetReference"
+					},
+					"name": "FacotiresResult"
+				}
+			],
+			"transformations": [
+				{
+					"name": "roundColumn"
+				},
+				{
+					"name": "roundColumn2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> factoriesRoundNumbers",
+				"factoriesRoundNumbers derive(roundLatitude = round(toFloat(Latitude), 2)\r",
+				") ~> roundColumn",
+				"roundColumn derive(roundLongitude = round(toFloat(Longitude),2)) ~> roundColumn2",
+				"roundColumn2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> FacotiresResult"
+			]
+		}
+	}
+}
