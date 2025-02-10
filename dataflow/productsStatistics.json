@@ -14,7 +14,53 @@
 			],
 			"sinks": [
 				{
-					"name": "sink1"
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "sinkAVGdivision"
+				},
+				{
+					"dataset": {
+						"referenceName": "ResultsProductionFactory",
+						"type": "DatasetReference"
+					},
+					"name": "sinkLots"
+				},
+				{
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "sinkWicked"
+				},
+				{
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "sinkShack"
+				},
+				{
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "sinkTheOther"
+				},
+				{
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSecret"
+				},
+				{
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"name": "sinkAVGunits"
 				}
 			],
 			"transformations": [
@@ -43,7 +89,7 @@
 					"name": "totalUnitsShack"
 				},
 				{
-					"name": "join1"
+					"name": "joinShack"
 				},
 				{
 					"name": "addJoinColumnTotalShack"
@@ -52,10 +98,10 @@
 					"name": "addJoinColumnSumShack"
 				},
 				{
-					"name": "percentageDivision"
+					"name": "percentageDivisionShack"
 				},
 				{
-					"name": "removeColumnsPercentage"
+					"name": "removeColumnsPercentageShack"
 				},
 				{
 					"name": "totalUnitWicked"
@@ -67,13 +113,13 @@
 					"name": "addJoinColumnSumWicked"
 				},
 				{
-					"name": "join2"
+					"name": "joinWicked"
 				},
 				{
 					"name": "percentageDivisionWicked"
 				},
 				{
-					"name": "removeColumnsPercentage2"
+					"name": "removeColumnsPercentageWicked"
 				},
 				{
 					"name": "sumUnitsTheOther"
@@ -100,10 +146,10 @@
 					"name": "addJoinColumnSumSecret"
 				},
 				{
-					"name": "join3"
+					"name": "joinTheOther"
 				},
 				{
-					"name": "join4"
+					"name": "joinSecret"
 				},
 				{
 					"name": "percentageDivisionTheOther"
@@ -112,10 +158,10 @@
 					"name": "percentageDivisionSecret"
 				},
 				{
-					"name": "select1"
+					"name": "removeColumnsPercentageSecret"
 				},
 				{
-					"name": "select2"
+					"name": "removeColumnsPercentageTheOther"
 				},
 				{
 					"name": "totalUnitLots"
@@ -127,7 +173,16 @@
 					"name": "sumUnitsLots"
 				},
 				{
-					"name": "addJoinColumnLots"
+					"name": "addJoinColumnSumLots"
+				},
+				{
+					"name": "joinLots"
+				},
+				{
+					"name": "percentageDivisionLots"
+				},
+				{
+					"name": "removeColumnsPercentageLots"
 				}
 			],
 			"scriptLines": [
@@ -179,20 +234,20 @@
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
+				"     broadcast: 'auto')~> joinShack",
 				"totalUnitsShack derive(JoinKeyTotal = 1) ~> addJoinColumnTotalShack",
 				"sumUnitsShack derive(JoinKeySum = 1) ~> addJoinColumnSumShack",
-				"join1 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"joinShack derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
 				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
-				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivision",
-				"percentageDivision select(mapColumn(",
+				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionShack",
+				"percentageDivisionShack select(mapColumn(",
 				"          Division,",
 				"          percentageUnitPrice,",
 				"          percentageUnitCost,",
 				"          percentageUnitProfit",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentage",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentageShack",
 				"factoryShack@factoryWicked aggregate(totalSumUnitPrice = sum(toFloat({Unit Price})),",
 				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
 				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitWicked",
@@ -202,8 +257,8 @@
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join2",
-				"join2 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"     broadcast: 'auto')~> joinWicked",
+				"joinWicked derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
 				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
 				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionWicked",
 				"percentageDivisionWicked select(mapColumn(",
@@ -213,7 +268,7 @@
 				"          percentageUnitProfit",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentage2",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentageWicked",
 				"factoryShack@factoryTheOther aggregate(groupBy(Division),",
 				"     sumUnitPrice = sum(toFloat({Unit Price})),",
 				"          sumUnitProfit = sum(toFloat({Unit Profit})),",
@@ -236,16 +291,16 @@
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join3",
+				"     broadcast: 'auto')~> joinTheOther",
 				"addJoinColumnSumSecret, addJoinColumnTotalSecret join(JoinKeySum == JoinKeyTotal,",
 				"     joinType:'left',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join4",
-				"join3 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"     broadcast: 'auto')~> joinSecret",
+				"joinTheOther derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
 				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
 				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionTheOther",
-				"join4 derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"joinSecret derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
 				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
 				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionSecret",
 				"percentageDivisionSecret select(mapColumn(",
@@ -255,7 +310,7 @@
 				"          percentageUnitProfit",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentageSecret",
 				"percentageDivisionTheOther select(mapColumn(",
 				"          Division,",
 				"          percentageUnitPrice,",
@@ -263,8 +318,8 @@
 				"          percentageUnitProfit",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
-				"factoryShack@factoryLots aggregate(percentageUnitPrice = sum(toFloat({Unit Price})),",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentageTheOther",
+				"factoryShack@factoryLots aggregate(totalSumUnitPrice = sum(toFloat({Unit Price})),",
 				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
 				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitLots",
 				"totalUnitLots derive(JoinKeyTotal = 1) ~> addJoinColumnTotalLots",
@@ -272,11 +327,93 @@
 				"     sumUnitPrice = sum(toFloat({Unit Price})),",
 				"          sumUnitCost = sum(toFloat({Unit Cost})),",
 				"          sumUnitProfit = sum(toFloat({Unit Profit}))) ~> sumUnitsLots",
-				"sumUnitsLots derive(JoinKeySum = 1) ~> addJoinColumnLots",
+				"sumUnitsLots derive(JoinKeySum = 1) ~> addJoinColumnSumLots",
+				"addJoinColumnSumLots, addJoinColumnTotalLots join(JoinKeySum == JoinKeyTotal,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinLots",
+				"joinLots derive(percentageUnitPrice = round(((sumUnitPrice / totalSumUnitPrice) * 100),2),",
+				"          percentageUnitCost = round(((sumUnitCost / totalSumUnitCost) * 100),2),",
+				"          percentageUnitProfit = round(((sumUnitProfit / totalSumUnitProfit) * 100),2)) ~> percentageDivisionLots",
+				"percentageDivisionLots select(mapColumn(",
+				"          Division,",
+				"          percentageUnitPrice,",
+				"          percentageUnitCost,",
+				"          percentageUnitProfit",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> removeColumnsPercentageLots",
 				"roundValues2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'AVGdivision',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> sinkAVGdivision",
+				"removeColumnsPercentageLots sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'productsUnitProfitLots',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkLots",
+				"removeColumnsPercentageWicked sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'productsUnitProfitWicked',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkWicked",
+				"removeColumnsPercentageShack sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'productsUnitProfitShack',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkShack",
+				"removeColumnsPercentageTheOther sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'productsUnitProfitTheOther',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkTheOther",
+				"removeColumnsPercentageSecret sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'productsUnitProfitSecret',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkSecret",
+				"roundValues1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'AVGunits',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkAVGunits"
 			]
 		}
 	}
