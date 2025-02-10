@@ -19,7 +19,7 @@
 						"referenceName": "ProductsUnitProfit",
 						"type": "DatasetReference"
 					},
-					"name": "ProductsWithUnitProfit"
+					"name": "sinkoutput"
 				}
 			],
 			"transformations": [
@@ -53,9 +53,10 @@
 				"          Latitude as string,",
 				"          Longitude as string",
 				"     ),",
-				"     filePattern:'productsWithUnitProfit',",
+				"     filePattern:(concat('output_folder/dane_', toString(currentDate()), '.csv')\r",
+				"),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ProductsWithUnitProfit"
+				"     skipDuplicateMapOutputs: true) ~> sinkoutput"
 			]
 		}
 	}
