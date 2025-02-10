@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ProductsUnitProfit",
+						"referenceName": "ResultsProductionFactory",
 						"type": "DatasetReference"
 					},
 					"name": "sinkAVGdivision"
@@ -29,35 +29,35 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ProductsUnitProfit",
+						"referenceName": "ResultsProductionFactory",
 						"type": "DatasetReference"
 					},
 					"name": "sinkWicked"
 				},
 				{
 					"dataset": {
-						"referenceName": "ProductsUnitProfit",
+						"referenceName": "ResultsProductionFactory",
 						"type": "DatasetReference"
 					},
 					"name": "sinkShack"
 				},
 				{
 					"dataset": {
-						"referenceName": "ProductsUnitProfit",
+						"referenceName": "ResultsProductionFactory",
 						"type": "DatasetReference"
 					},
 					"name": "sinkTheOther"
 				},
 				{
 					"dataset": {
-						"referenceName": "ProductsUnitProfit",
+						"referenceName": "ResultsProductionFactory",
 						"type": "DatasetReference"
 					},
 					"name": "sinkSecret"
 				},
 				{
 					"dataset": {
-						"referenceName": "ProductsUnitProfit",
+						"referenceName": "ResultsProductionFactory",
 						"type": "DatasetReference"
 					},
 					"name": "sinkAVGunits"
