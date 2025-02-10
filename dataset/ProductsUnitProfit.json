@@ -5,11 +5,20 @@
 			"referenceName": "AzureBlobStorageResults",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"filename": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
 				"folderPath": "ProductsResult/ProductsAddUnitProfitCol",
 				"container": "resultsdatasets"
 			},
