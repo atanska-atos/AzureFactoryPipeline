@@ -54,7 +54,7 @@
 				"          Latitude as string,",
 				"          Longitude as string",
 				"     ),",
-				"     filePattern:(concat('ProductsAddUnitProfitCol/products_', toString(currentDate()), '.csv')\r",
+				"     filePattern:(concat('products_', toString(currentDate()), '.csv')\r",
 				"),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> productsAddUnitProfitColOUTPUT"
