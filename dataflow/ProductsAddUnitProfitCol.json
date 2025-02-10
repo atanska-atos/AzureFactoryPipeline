@@ -1,5 +1,5 @@
 {
-	"name": "addNewColumn",
+	"name": "ProductsAddUnitProfitCol",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -9,7 +9,8 @@
 						"referenceName": "ProductsTable",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "ProductsTableSource",
+					"description": "Import data from ProductsTable (products.csv)"
 				}
 			],
 			"sinks": [
@@ -23,10 +24,12 @@
 			],
 			"transformations": [
 				{
-					"name": "addUnitProfitColumn"
+					"name": "addUnitProfitColumn",
+					"description": "Creating a new column that contains the comparison of 'Unit Price' and 'Unit Cost' for each row, labeled 'Unit Profit.'"
 				},
 				{
-					"name": "roundValues"
+					"name": "roundValues",
+					"description": "Updating the 'Unit Profit' column by rounding the values it contains."
 				}
 			],
 			"scriptLines": [
@@ -40,8 +43,8 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 derive({Unit Profit} = toFloat({Unit Price})-toFloat({Unit Cost})) ~> addUnitProfitColumn",
+				"     ignoreNoFilesFound: false) ~> ProductsTableSource",
+				"ProductsTableSource derive({Unit Profit} = toFloat({Unit Price})-toFloat({Unit Cost})) ~> addUnitProfitColumn",
 				"addUnitProfitColumn derive({Unit Profit} = round({Unit Profit},2)) ~> roundValues",
 				"roundValues sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -50,6 +53,7 @@
 				"          Latitude as string,",
 				"          Longitude as string",
 				"     ),",
+				"     filePattern:'productsWithUnitProfit',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> ProductsWithUnitProfit"
 			]
