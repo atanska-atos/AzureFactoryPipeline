@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "ProductsResult",
+				"folderPath": "ProductsResult/ProductsAddUnitProfitCol",
 				"container": "resultsdatasets"
 			},
 			"columnDelimiter": ",",
