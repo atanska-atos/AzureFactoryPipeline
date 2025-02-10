@@ -1,0 +1,73 @@
+{
+	"name": "salesDetails",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "salesProcessingSource",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "sort1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Row ID} as string,",
+				"          {Order ID} as string,",
+				"          {Ship Date} as string,",
+				"          {Ship Mode} as string,",
+				"          {Customer ID} as string,",
+				"          {Country/Region} as string,",
+				"          City as string,",
+				"          {State/Province} as string,",
+				"          {Postal Code} as string,",
+				"          Division as string,",
+				"          Region as string,",
+				"          {Product ID} as string,",
+				"          {Product Name} as string,",
+				"          Sales as string,",
+				"          Units as string,",
+				"          {Gross Profit} as string,",
+				"          Cost as string,",
+				"          OrderDay as string,",
+				"          OrderMonth as string,",
+				"          OrderYear as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 aggregate(groupBy(City,",
+				"          Division),",
+				"     {Amounts of Units} = sum(toInteger(Units)),",
+				"          Sales = round(sum(toFloat(Sales)),2),",
+				"          {Gross Profit} = round(sum(toFloat({Gross Profit})),2),",
+				"          Cost = round(sum(toFloat(Cost)),2)) ~> aggregate1",
+				"aggregate1 sort(desc({Amounts of Units}, true)) ~> sort1",
+				"sort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     filePattern:'divisionAndCityStats',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
