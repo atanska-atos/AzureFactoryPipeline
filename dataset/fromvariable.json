@@ -8,7 +8,7 @@
 		"parameters": {
 			"filepath": {
 				"type": "string",
-				"defaultValue": "@concat('', variables('lastFile'))"
+				"defaultValue": "@concat('ProductsResult/ProductsAddUnitProfitCol/', variables('lastFile'))"
 			}
 		},
 		"annotations": [],
