@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"folderPath": "ProductsResult",
-				"container": "Results"
+				"container": "resultsdatasets"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
