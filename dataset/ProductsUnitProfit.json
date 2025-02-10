@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "products_2025-02-10-00001.csv",
 				"folderPath": "ProductsResult/ProductsAddUnitProfitCol",
 				"container": "resultsdatasets"
 			},
