@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"filepath": {
+			"filePath": {
 				"type": "string",
 				"defaultValue": "@concat('ProductsResult/ProductsAddUnitProfitCol/', variables('lastFile'))"
 			}
