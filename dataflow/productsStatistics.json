@@ -116,6 +116,18 @@
 				},
 				{
 					"name": "select2"
+				},
+				{
+					"name": "totalUnitLots"
+				},
+				{
+					"name": "addJoinColumnTotalLots"
+				},
+				{
+					"name": "sumUnitsLots"
+				},
+				{
+					"name": "addJoinColumnLots"
 				}
 			],
 			"scriptLines": [
@@ -252,6 +264,15 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
+				"factoryShack@factoryLots aggregate(percentageUnitPrice = sum(toFloat({Unit Price})),",
+				"          totalSumUnitCost = sum(toFloat({Unit Cost})),",
+				"          totalSumUnitProfit = sum(toFloat({Unit Profit}))) ~> totalUnitLots",
+				"totalUnitLots derive(JoinKeyTotal = 1) ~> addJoinColumnTotalLots",
+				"factoryShack@factoryLots aggregate(groupBy(Division),",
+				"     sumUnitPrice = sum(toFloat({Unit Price})),",
+				"          sumUnitCost = sum(toFloat({Unit Cost})),",
+				"          sumUnitProfit = sum(toFloat({Unit Profit}))) ~> sumUnitsLots",
+				"sumUnitsLots derive(JoinKeySum = 1) ~> addJoinColumnLots",
 				"roundValues2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
