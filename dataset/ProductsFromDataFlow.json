@@ -1,0 +1,56 @@
+{
+	"name": "ProductsFromDataFlow",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageResults",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "products_*.csv'",
+					"type": "Expression"
+				},
+				"folderPath": "ProductsResult/ProductsAddUnitProfitCol",
+				"container": "resultsdatasets"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Division",
+				"type": "String"
+			},
+			{
+				"name": "Product Name",
+				"type": "String"
+			},
+			{
+				"name": "Factory",
+				"type": "String"
+			},
+			{
+				"name": "Product ID",
+				"type": "String"
+			},
+			{
+				"name": "Unit Price",
+				"type": "String"
+			},
+			{
+				"name": "Unit Cost",
+				"type": "String"
+			},
+			{
+				"name": "Unit Profit",
+				"type": "String"
+			}
+		]
+	}
+}
