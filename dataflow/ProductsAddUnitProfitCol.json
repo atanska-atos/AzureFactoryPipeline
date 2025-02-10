@@ -19,7 +19,8 @@
 						"referenceName": "ProductsUnitProfit",
 						"type": "DatasetReference"
 					},
-					"name": "sinkoutput"
+					"name": "productsAddUnitProfitColOUTPUT",
+					"description": "Export data to ProductsUnitProfit dataset."
 				}
 			],
 			"transformations": [
@@ -53,10 +54,10 @@
 				"          Latitude as string,",
 				"          Longitude as string",
 				"     ),",
-				"     filePattern:(concat('output_folder/dane_', toString(currentDate()), '.csv')\r",
+				"     filePattern:(concat('ProductsAddUnitProfitCol/products_', toString(currentDate()), '.csv')\r",
 				"),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkoutput"
+				"     skipDuplicateMapOutputs: true) ~> productsAddUnitProfitColOUTPUT"
 			]
 		}
 	}
