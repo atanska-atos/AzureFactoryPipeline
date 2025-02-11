@@ -5,11 +5,6 @@
 			"referenceName": "AzureBlobStorageResults",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"filePath": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
