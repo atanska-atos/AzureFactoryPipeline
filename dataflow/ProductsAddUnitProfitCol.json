@@ -34,9 +34,6 @@
 				}
 			],
 			"scriptLines": [
-				"parameters{",
-				"     filePath as string",
-				"}",
 				"source(output(",
 				"          Division as string,",
 				"          {Product Name} as string,",
