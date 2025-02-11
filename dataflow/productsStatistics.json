@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ProductsDefault",
+						"referenceName": "fromvariable",
 						"type": "DatasetReference"
 					},
 					"name": "ProductsUnitProfit"
