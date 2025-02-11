@@ -1,5 +1,5 @@
 {
-	"name": "productsStatistics",
+	"name": "ProductsStatistics",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

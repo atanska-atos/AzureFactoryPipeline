@@ -138,7 +138,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "productsStatistics",
+						"referenceName": "ProductsStatistics",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"ProductsUnitProfit": {
