@@ -63,30 +63,6 @@
 				}
 			},
 			{
-				"name": "Set variable",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get Metadata1",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"policy": {
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "lastFile",
-					"value": {
-						"value": "\n",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "ForEach1",
 				"type": "ForEach",
 				"dependsOn": [
@@ -100,7 +76,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata').output.childItems\n",
+						"value": "@activity('Get Metadata1').output.childItems\n",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -139,6 +115,45 @@
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "productsStatistics",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"ProductsUnitProfit": {
+								"filePath": {
+									"value": "@concat(variables('lastFile'))\n",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
 				}
 			}
 		],
