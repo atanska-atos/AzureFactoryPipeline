@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "production",
-				"container": "results"
+				"folderPath": "ProductsResult/ProductsStatistics",
+				"container": "resultsdatasets"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
