@@ -15,10 +15,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "addNewColumn",
-						"type": "DataFlowReference"
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
@@ -47,7 +43,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "productsStatistics",
+						"referenceName": "ProductsStatistics",
 						"type": "DataFlowReference"
 					},
 					"compute": {
