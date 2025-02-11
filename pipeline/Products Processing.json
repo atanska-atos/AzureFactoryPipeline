@@ -17,12 +17,7 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "ProductsAddUnitProfitCol",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"productsAddUnitProfitColOUTPUT": {
-								"filePath": "@dataset().filePath"
-							}
-						}
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,
@@ -32,7 +27,7 @@
 				}
 			},
 			{
-				"name": "Get Metadata",
+				"name": "Get Metadata1",
 				"type": "GetMetadata",
 				"dependsOn": [
 					{
@@ -53,10 +48,7 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "ProductsUnitProfit",
-						"type": "DatasetReference",
-						"parameters": {
-							"filePath": "@dataset().filePath"
-						}
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"childItems"
@@ -68,6 +60,27 @@
 					"formatSettings": {
 						"type": "DelimitedTextReadSettings"
 					}
+				}
+			},
+			{
+				"name": "Set variable",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "lastFile",
+					"value": "@last(sort(activity('Get Metadata').output.childItems, 'name')).name\n"
 				}
 			}
 		],
