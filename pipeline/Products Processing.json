@@ -1,6 +1,90 @@
 {
 	"name": "Products Processing",
 	"properties": {
+		"activities": [
+			{
+				"name": "ProductsAddUnitProfitCol",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "ProductsAddUnitProfitCol",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"productsAddUnitProfitColOUTPUT": {
+								"filePath": "@dataset().filePath"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Get data from ProductsUnitProfit",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "ProductsAddUnitProfitCol",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ProductsUnitProfit",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "set variable of filenames",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get data from ProductsUnitProfit",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": []
+			}
+		],
 		"annotations": []
 	}
 }
