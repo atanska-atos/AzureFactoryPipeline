@@ -1,5 +1,5 @@
 {
-	"name": "ResultsProductionFactory",
+	"name": "ProductionFactory_results",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageResults",
