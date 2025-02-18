@@ -1,5 +1,5 @@
 {
-	"name": "ProductsUnitProfit",
+	"name": "ProductsUnitProfit_results",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorageResults",
