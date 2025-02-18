@@ -1,5 +1,5 @@
 {
-	"name": "roundColums",
+	"name": "FactoriesRoundValues",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -27,6 +27,9 @@
 				},
 				{
 					"name": "roundColumn2"
+				},
+				{
+					"name": "removeColumns"
 				}
 			],
 			"scriptLines": [
@@ -40,7 +43,14 @@
 				"     ignoreNoFilesFound: false) ~> factoriesRoundNumbers",
 				"factoriesRoundNumbers derive(roundLatitude = round(toFloat(Latitude), 2)) ~> roundColumn",
 				"roundColumn derive(roundLongitude = round(toFloat(Longitude),2)) ~> roundColumn2",
-				"roundColumn2 sink(allowSchemaDrift: true,",
+				"roundColumn2 select(mapColumn(",
+				"          Factory,",
+				"          roundLatitude,",
+				"          roundLongitude",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> removeColumns",
+				"removeColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> FacotiresResult"
