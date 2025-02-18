@@ -9,7 +9,8 @@
 						"referenceName": "fromvariable",
 						"type": "DatasetReference"
 					},
-					"name": "ProductsUnitProfit"
+					"name": "ProductsUnitProfit",
+					"description": "Import data from 'fromvariable' (last saved CSV file as a result of previous processing)."
 				}
 			],
 			"sinks": [
@@ -77,7 +78,8 @@
 					"name": "roundValues2"
 				},
 				{
-					"name": "factoryShack"
+					"name": "factoryShack",
+					"description": "Conditionally distributing the data in Factory groups, based on name of factory."
 				},
 				{
 					"name": "sumUnitsWicked"
