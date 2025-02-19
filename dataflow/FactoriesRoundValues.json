@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Result1",
+						"referenceName": "ProductionFactory_results",
 						"type": "DatasetReference"
 					},
 					"name": "FacotiresResult"
@@ -52,6 +52,11 @@
 				"     skipDuplicateMapOutputs: true) ~> removeColumns",
 				"removeColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> FacotiresResult"
 			]
