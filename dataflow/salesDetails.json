@@ -9,24 +9,64 @@
 						"referenceName": "salesProcessingSource",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "SalesSource",
+					"description": "Import data from salesProcessingSource (Sales.csv)\n"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "SalesProcessing",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "cityAggregationResult"
+				},
+				{
+					"dataset": {
+						"referenceName": "SalesProcessing",
+						"type": "DatasetReference"
+					},
+					"name": "regionAggregationResult"
+				},
+				{
+					"dataset": {
+						"referenceName": "SalesProcessing",
+						"type": "DatasetReference"
+					},
+					"name": "shipModeAggregationResult"
+				},
+				{
+					"dataset": {
+						"referenceName": "SalesProcessing",
+						"type": "DatasetReference"
+					},
+					"name": "stateAggregationResult"
 				}
 			],
 			"transformations": [
 				{
-					"name": "aggregate1"
+					"name": "stateAggregation"
 				},
 				{
-					"name": "sort1"
+					"name": "amountsOfUnitsSort3"
+				},
+				{
+					"name": "cityAggregation"
+				},
+				{
+					"name": "amountsOfUnitsSort2"
+				},
+				{
+					"name": "regionAggregation"
+				},
+				{
+					"name": "amountsOfUnitsSort1"
+				},
+				{
+					"name": "shipModeAggregation"
+				},
+				{
+					"name": "amountsOfUnitsSort4"
 				}
 			],
 			"scriptLines": [
@@ -54,19 +94,75 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 aggregate(groupBy(City,",
+				"     ignoreNoFilesFound: false) ~> SalesSource",
+				"SalesSource aggregate(groupBy({State/Province},",
 				"          Division),",
 				"     {Amounts of Units} = sum(toInteger(Units)),",
 				"          Sales = round(sum(toFloat(Sales)),2),",
 				"          {Gross Profit} = round(sum(toFloat({Gross Profit})),2),",
-				"          Cost = round(sum(toFloat(Cost)),2)) ~> aggregate1",
-				"aggregate1 sort(desc({Amounts of Units}, true)) ~> sort1",
-				"sort1 sink(allowSchemaDrift: true,",
+				"          Cost = round(sum(toFloat(Cost)),2)) ~> stateAggregation",
+				"cityAggregation sort(desc({Amounts of Units}, true)) ~> amountsOfUnitsSort3",
+				"SalesSource aggregate(groupBy(City,",
+				"          Division),",
+				"     {Amounts of Units} = sum(toInteger(Units)),",
+				"          Sales = round(sum(toFloat(Sales)),2),",
+				"          {Gross Profit} = round(sum(toFloat({Gross Profit})),2),",
+				"          Cost = round(sum(toFloat(Cost)),2)) ~> cityAggregation",
+				"regionAggregation sort(desc({Amounts of Units}, true)) ~> amountsOfUnitsSort2",
+				"SalesSource aggregate(groupBy(Region,",
+				"          Division),",
+				"     {Amounts of Units} = sum(toInteger(Units)),",
+				"          Sales = round(sum(toFloat(Sales)),2),",
+				"          {Gross Profit} = round(sum(toFloat({Gross Profit})),2),",
+				"          Cost = round(sum(toFloat(Cost)),2)) ~> regionAggregation",
+				"shipModeAggregation sort(desc({Amounts of Units}, true)) ~> amountsOfUnitsSort1",
+				"SalesSource aggregate(groupBy({Ship Mode},",
+				"          Division),",
+				"     {Amounts of Units} = sum(toInteger(Units)),",
+				"          Sales = round(sum(toFloat(Sales)),2),",
+				"          {Gross Profit} = round(sum(toFloat({Gross Profit})),2),",
+				"          Cost = round(sum(toFloat(Cost)),2)) ~> shipModeAggregation",
+				"stateAggregation sort(desc({Amounts of Units}, true)) ~> amountsOfUnitsSort4",
+				"amountsOfUnitsSort3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     filePattern:'divisionAndCityStats',",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'city_division',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> cityAggregationResult",
+				"amountsOfUnitsSort2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'region_division',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> regionAggregationResult",
+				"amountsOfUnitsSort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'shipMode_division',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> shipModeAggregationResult",
+				"amountsOfUnitsSort4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Factory as string,",
+				"          Latitude as string,",
+				"          Longitude as string",
+				"     ),",
+				"     filePattern:'state_division',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> stateAggregationResult"
 			]
 		}
 	}
